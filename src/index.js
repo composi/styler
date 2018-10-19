@@ -1,3 +1,4 @@
+const atRulesCache = []
 /**
  * Creates a stylesheet scoped to the component.
  * Takes and object: {base: selector, styles: {selector: {property: value}}
@@ -89,13 +90,19 @@ export const addStyles = (base, styles) => {
       styles = flatten(styles) // eslint-disable-line no-param-reassign
       styles.map(block => {
         for (let prop in block) {
-          let value = block[prop]
+          let value
+          if (/^@media/gim.test(prop) || /^@keyframes/gim.test(prop)) {
+            atRulesCache.push(prop + block[prop])
+          }
+          value = block[prop]
           if (isPlainObject(value) || Array.isArray(value)) {
             rules = rules.concat(
               rulesFromStyles(combineSelectors(selector, prop), value)
             )
           } else {
-            if (prop === 'content') value = "'" + value + "'"
+            if (prop === 'content') {
+              value = "'" + value + "'"
+            }
             style[prop] = value
           }
         }
@@ -122,6 +129,11 @@ export const addStyles = (base, styles) => {
           sheet.insertRule(rulez + '{' + pairs.join(';') + '}', 0)
         }
       })
+      if (atRulesCache.length) {
+        atRulesCache.map(rule => {
+          sheet.insertRule(rule, 0)
+        })
+      }
       return sheet
     }
 

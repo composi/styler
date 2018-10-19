@@ -11,6 +11,8 @@ This is an ES6 module that lets you create a virtual stylesheet for a component.
 * [Camel Case or Quoted](#Camel-Case-or-Quoted)
 * [Pixel Values](#Pixel-Values)
 * [Nested Elements](#Nested-Elements)
+* [Media Queries](#Media-Queries)
+* [Keyframe Animation](#Keyframe-Animation)
 * [BEM](#BEM)
 * [@composi/core Components](#@composi/core-Components)
 
@@ -18,10 +20,13 @@ This is an ES6 module that lets you create a virtual stylesheet for a component.
 
 Styler provides support for a wide range of CSS styles for components. There are two type of styles that Styler cannot handle: media queries and key frame animations.
 
+Styler is ideal for components that will be rendered a single time. Trying to create custom stylesheets for something that repeats, such as list items, is extremely wasteful.
+
 Styler exposes one function: `addstyles`. This takes two arguments: `base` and `styles`. 
 
+
 ### base
-`base` is a valid CSS selector for the element to which the stylesheet will be attached. This should be unique in the document to prevent style leaks. So, best to use an id for `base`. If your component will be used multiple times, give it a class and use that as the base. 
+`base` is a valid CSS selector for the element to which the stylesheet will be attached. This should be unique in the document to prevent style leaks. So, best to use an id for `base`. If your component will be used multiple times, give it a class and use that as the base. Or you may use the container that the component will be rendered in as base. 
 
 ### styles
 `styles` is an object defining the stylesheet you want to create.
@@ -154,6 +159,53 @@ This will produce the following stylesheet:
 #main ul li:last-of-type {
   border: none;
 }
+```
+
+## Media Queries
+
+You can add media queries to your component's stylesheet. Just make sure you quote the entire media query. To create a media query rule you need to quote the entire query, and then the entire value. Notice how this is done below:
+
+```javascript
+addStyles('h1', {
+    padding: '2rem',
+    fontSize: '13pt'
+  }
+  '@media only screen and (max-width: 500px)':  `{
+    h1: {
+      padding: '1rem',
+      fontSize: '11pt'
+    }
+}`)
+```
+
+## Keyframe Animation
+
+You can add keyframe animations. To do so youo need to quote the keyframe and name property together, and then quote the entire animation rule. Notice how we do that below:
+
+```javascript
+addStyles(nav, {
+  h1: {
+    'animation-duration': '3s',
+    'animation-timing-function': 'ease-out',
+    'animation-fill-mode': 'forwards',
+    'text-shadow': '0 5px 5px white',
+    ':hover': {
+      'animation': 'animate-out'
+    }
+  },
+  '@keyframes animate-out': `{
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+      height: 40px;
+    }
+    100% {
+      transform: translateX(1000px); 
+      opacity: 0;
+      height: 0px;
+    }
+  }`
+})
 ```
 
 ## BEM

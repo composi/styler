@@ -171,3 +171,7 @@ test('If there are multiple property definitions, only the last will be used.', 
   expect(style1.selectorText).toBe('h1')
   expect(style1.style['padding']).toBe('10px')
 })
+
+/**
+ * Would like to include tests for media queries and keyframe animation. However, JSDOM seems to have problems creating them. So, we've verified them in the browser for now.
+ */
