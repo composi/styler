@@ -1,6 +1,19 @@
 # styler
 
-This is an ES6 module that lets you create a virtual stylesheet for a component. It takes two arguments: `base` and `styles`. 
+This is an ES6 module that lets you create a virtual stylesheet for a component. 
+
+* [base](#base)
+* [styles](#styles)
+* [Install](#Install)
+* [Creating a Styles Object](#Creating-a-Styles-Object)
+* [Semicolons](#Semicolons)
+* [Camel Case or Quoted](#Camel-Case-or-Quoted)
+* [Pixel Values](#Pixel-Values)
+* [Nested Elements](#Nested-Elements)
+* [BEM](#BEM)
+* [@composi/core Components](#@composi/core-Components)
+
+Styler exposes one function: `addstyles`. This takes two arguments: `base` and `styles`. 
 
 ### base
 `base` is a valid CSS selector for the element to which the stylesheet will be attached. This should be unique in the document to prevent style leaks. So, best to use an id for `base`. If your component will be used multiple times, give it a class and use that as the base. 
@@ -8,7 +21,7 @@ This is an ES6 module that lets you create a virtual stylesheet for a component.
 ### styles
 `styles` is an object defining the stylesheet you want to create.
 
-## Installation
+## Install
 
 If you're created a project using `@composi/create-composi-app` then it's already and install. All you have to do is import it into your project to use:
 
@@ -40,14 +53,14 @@ Because this is a JavaScript object, you can't put semicolons at the end of a de
 
 ```javascript
 // Correct usage:
-createStylesheet('#list', {
+addStyles('#list', {
   // Use comma to separate from next property:
   border: 'solid 1px #ccc',
   margin: '20px'
 })
 
 // Incorrect:
-createStylesheet('#list', {
+addStyles('#list', {
   // Do not put semicolons at end!
   // This will generate an error:
   border: 'solid 1px #ccc';
@@ -61,14 +74,14 @@ Below are some examples of camel case and quoted properties:
 
 ```javascript
 // Camel case:
-createStylesheet('#list', {
+addStyles('#list', {
   backgroundColor: '#ff0000',
   fontFamily: 'sans-serif',
   textAlign: 'center'
 })
 
 // Or quoted:
-createStylesheet('#list', {
+addStyles('#list', {
   'background-color': '#ff0000',
   'font-family': 'sans-serif',
   'text-align': 'center'
@@ -80,7 +93,7 @@ createStylesheet('#list', {
 If you're using a pixel value for a property, you can leave off the length identifier and provide just a raw number:
 
 ```javascript
-createStylesheet('#list', {
+addStyles('#list', {
   // Define margin of 20px:
   margin: 20,
   // Define width of 300px:
@@ -93,7 +106,7 @@ createStylesheet('#list', {
 Like LESS and SASS, you can nest child elements to define their relationship to parents. This also works for pseudo-elements.
 
 ```javascript
-createStylesheet('#main', {
+addStyles('#main', {
   ul: {
     margin: 10,
     width: 350,
@@ -158,7 +171,7 @@ This will also work with [BEM](https://css-tricks.com/bem-101/). When doing so, 
 Define BEM CSS for above markup:
 
 ```javascript
-createStylesheet('body', {
+addStyles('body', {
   '.list': {
     margin: '20px 0',
     listStyle: 'none',
@@ -185,4 +198,39 @@ createStylesheet('body', {
     color: '#fff'
   }
 })
+```
+
+## @composi/core Components
+
+It's easy to style your @composi/core components with @composi/styler. The easiest way is to do it right before the return statement in a component:
+
+```javascript
+import { h, render } from '@composi/core'
+import { addStyles } from '@composi/styler'
+
+// Create list with associated stylesheet:
+function List({data}) {
+  // Base stylesheet rule on class 'list':
+  addStyles('.list', {
+    listStyles: 'none',
+    padding: 0,
+    margin: 0,
+    border: 'solid 1px #ccc',
+    li: {
+      padding: '5px 10px'
+      borderBottom: 'solid 1px #ccc'
+      ':last-of-type': {
+        border: 'none'
+      }
+    }
+  })
+  // Give list class of 'list':
+  return (
+    <ul class='list'>
+      {
+        data.map(item => <li key={item.key}>{item.value}</li>)
+      }
+    </ul>
+  )
+}
 ```

@@ -1,10 +1,11 @@
 /**
  * Creates a stylesheet scoped to the component.
  * Takes and object: {base: selector, styles: {selector: {property: value}}
- * @param {object} options 
+ * @param {'string'} base The base for the stylesheet.
+ * @param {Object<string, any>} styles An object literal defining the styles to create.
  */
 
-export const createStylesheet = (base, styles) => {
+export const addStyles = (base, styles) => {
 
   function createComponentStyles () {
     let sharedSheet = null
