@@ -4,10 +4,8 @@
  * @param {'string'} base The base for the stylesheet.
  * @param {Object<string, any>} styles An object literal defining the styles to create.
  */
-
 export const addStyles = (base, styles) => {
-
-  function createComponentStyles () {
+  function createComponentStyles() {
     let sharedSheet = null
 
     const unitlessProps = {
@@ -37,28 +35,28 @@ export const addStyles = (base, styles) => {
       return flat
     }
 
-    function createStyleSheet(options) {
+    function createStyleSheet(options = {}) {
       if (!(this instanceof createStyleSheet)) {
         return new createStyleSheet(options)
       }
-      options || (options = {})
-      options.prefix = !options.hasOwnProperty("prefix") ? true : !!options.prefix
-      options.unit = options.hasOwnProperty("unit") ? options.unit : "px"
+      options.prefix = !options.hasOwnProperty('prefix')
+        ? true
+        : !!options.prefix
+      options.unit = options.hasOwnProperty('unit') ? options.unit : 'px'
 
       this._sheet = null
       this._prefix = null
 
-      this.css = function (element, styles, selector) {
-        if (styles == null) return ""
+      this.css = function(element, styles) {
+        if (styles == null) return ''
         if (this._sheet == null) {
-          this._sheet = sharedSheet = (sharedSheet || createSheet())
+          this._sheet = sharedSheet = sharedSheet || createSheet()
         }
-        selector = element
 
-        const rules = rulesFromStyles(selector, styles)
-        if (options.prefix || options.unit !== "") {
+        const rules = rulesFromStyles(element, styles)
+        if (options.prefix || options.unit !== '') {
           rules.map(set => {
-            if (options.unit !== "") {
+            if (options.unit !== '') {
               addUnit(set[1], options.unit)
             }
           })
@@ -70,19 +68,25 @@ export const addStyles = (base, styles) => {
 
     function createSheet() {
       if (document.head == null) {
-        throw new Error("Can't add stylesheet before <head> is available. Make sure your document has a head element.")
+        throw new Error(
+          "Can't add stylesheet before <head> is available. Make sure your document has a head element."
+        )
       }
-      const style = document.createElement("style")
-      style.id = "styles_" + Math.random().toString(16).slice(2, 8)
+      const style = document.createElement('style')
+      style.id =
+        'styles_' +
+        Math.random()
+          .toString(16)
+          .slice(2, 8)
       document.head.appendChild(style)
       return style.sheet
     }
 
     function rulesFromStyles(selector, styles) {
-      if (!Array.isArray(styles)) styles = [styles]
+      if (!Array.isArray(styles)) styles = [styles] // eslint-disable-line no-param-reassign
       const style = {}
       let rules = []
-      styles = flatten(styles)
+      styles = flatten(styles) // eslint-disable-line no-param-reassign
       styles.map(block => {
         for (let prop in block) {
           let value = block[prop]
@@ -91,49 +95,56 @@ export const addStyles = (base, styles) => {
               rulesFromStyles(combineSelectors(selector, prop), value)
             )
           } else {
-            if (prop === "content") value = "'"+value+"'"
+            if (prop === 'content') value = "'" + value + "'"
             style[prop] = value
           }
         }
       })
 
-      rules.push([ selector, style ])
+      rules.push([selector, style])
       return rules
     }
 
     function insertRules(rules, sheet) {
-      window.sheet = sheet
+      window['sheet'] = sheet
       function hyphenate(str) {
-        return str.replace(/[A-Z]/g, function($0) { return '-'+$0.toLowerCase() })
+        return str.replace(/[A-Z]/g, function($0) {
+          return '-' + $0.toLowerCase()
+        })
       }
       rules.map(function(rule) {
         const pairs = []
         for (let prop in rule[1]) {
-          pairs.push(hyphenate(prop) + ":" + rule[1][prop])
+          pairs.push(hyphenate(prop) + ':' + rule[1][prop])
         }
         if (pairs.length > 0) {
           const rulez = rule[0] ? rule[0] : ''
-          sheet.insertRule(rulez + "{" + pairs.join(";") + "}", 0)
+          sheet.insertRule(rulez + '{' + pairs.join(';') + '}', 0)
         }
       })
       return sheet
     }
 
     function combineSelectors(parent, child) {
-      const pseudoRe = /^[:\[]/
-      const parents = parent.split(","), children = child.split(",")
-      return parents.map(function(parent) {
-        return children.map(function(part) {
-          const separator = pseudoRe.test(part) ? "" : " "
-          return parent + separator + part
-        }).join(",")
-      }).join(",")
+      const pseudoRe = /^[:[]/
+      const parents = parent.split(','),
+        children = child.split(',')
+      return parents
+        .map(function(parent) {
+          return children
+            .map(function(part) {
+              const separator = pseudoRe.test(part) ? '' : ' '
+              return parent + separator + part
+            })
+            .join(',')
+        })
+        .join(',')
     }
 
     function addUnit(style, unit) {
       for (let prop in style) {
-        let value = style[prop] + ""
-        if (!isNaN(value) && !unitlessProps[prop]) {
+        let value = style[prop] + ''
+        if (!isNaN(/** @type {any} */ (value)) && !unitlessProps[prop]) {
           value = value + unit
         }
         style[prop] = value

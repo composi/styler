@@ -2,6 +2,7 @@
 
 This is an ES6 module that lets you create a virtual stylesheet for a component. 
 
+* [Unsupported Features](#Unsupported-Features)
 * [base](#base)
 * [styles](#styles)
 * [Install](#Install)
@@ -12,6 +13,10 @@ This is an ES6 module that lets you create a virtual stylesheet for a component.
 * [Nested Elements](#Nested-Elements)
 * [BEM](#BEM)
 * [@composi/core Components](#@composi/core-Components)
+
+## Unsupported Features
+
+Styler provides support for a wide range of CSS styles for components. There are two type of styles that Styler cannot handle: media queries and key frame animations.
 
 Styler exposes one function: `addstyles`. This takes two arguments: `base` and `styles`. 
 
