@@ -1,8 +1,8 @@
 {
   "name": "@composi/styler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create virtual stylesheets scoped to a component.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "run-s format lint checkjs test",
     "checkjs": "tsc --allowJs --checkJs --noEmit --moduleResolution node --target ES6 src/*.js",
