@@ -18,7 +18,7 @@ This is an ES6 module that lets you create a virtual stylesheet for a component.
 
 ## Unsupported Features
 
-Styler provides support for a wide range of CSS styles for components. There are two type of styles that Styler cannot handle: media queries and key frame animations.
+Styler provides support for a wide range of CSS styles for components.
 
 Styler is ideal for components that will be rendered a single time. Trying to create custom stylesheets for something that repeats, such as list items, is extremely wasteful.
 
