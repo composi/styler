@@ -1,6 +1,6 @@
 {
   "name": "@composi/styler",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Create virtual stylesheets scoped to a component.",
   "main": "src/index.js",
   "scripts": {
