@@ -3,7 +3,7 @@ const atRulesCache = []
  * Creates a stylesheet scoped to the component.
  * Takes and object: {base: selector, styles: {selector: {property: value}}
  * @param {'string'} base The base for the stylesheet.
- * @param {Object<string, any>} styles An object literal defining the styles to create.
+ * @param {Object<string, string | number>} styles An object literal defining the styles to create.
  */
 export const addStyles = (base, styles) => {
   function createComponentStyles() {
