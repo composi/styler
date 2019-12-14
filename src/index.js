@@ -4,6 +4,7 @@ const atRulesCache = []
  * Takes and object: {base: selector, styles: {selector: {property: value}}
  * @param {'string'} base The base for the stylesheet.
  * @param {Object<string, string | number>} styles An object literal defining the styles to create.
+ * @returns {void} undefined
  */
 export const addStyles = (base, styles) => {
   function createComponentStyles() {
